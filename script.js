@@ -13,7 +13,7 @@ images/sit.png	Think	Speak	Sit	Listen	Sit
 images/cry.png	Talk	Listen	Cry	Write	Cry
 images/celebrate.png	Celebrate	Sing	Play	Run	Celebrate
 images/drink.png	Drink	Drive	Walk	Run	Drink
-images/run.png	Listen	Talk	Write	Run	Run
+images/run.png	Listen	Talk	Write	Run	Drink
 images/watch.png	Cook	Watch	Drink	Read	Watch
 images/discuss.png	Ride	Drive	Discuss	Run	Discuss
 images/write.png	Watch	See	Look	Write	Write
@@ -30,8 +30,11 @@ images/go.png	Break	Fix	Go	Draw	Go
 images/sell.png	Play	Sell	Sing	Write	Sell
 `;
 
-let questions = [];
+let allQuestions = [];
+let quizQuestions = [];
 let currentQuestion = 0;
+let correctCount = 0;
+let wrongCount = 0;
 
 function parseTSV(tsv) {
   const lines = tsv.trim().split('\n');
@@ -50,19 +53,29 @@ function parseTSV(tsv) {
   });
 }
 
-questions = parseTSV(rawData);
-shuffleArray(questions);
-showQuestion();
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 function showQuestion() {
-  const question = questions[currentQuestion];
+  const question = quizQuestions[currentQuestion];
   const img = document.getElementById('image');
   const optionsDiv = document.getElementById('options');
   const nextBtn = document.getElementById('nextBtn');
+  const correctCountEl = document.getElementById('correctCount');
+  const wrongCountEl = document.getElementById('wrongCount');
+  const questionNumberEl = document.getElementById('questionNumber');
 
   img.src = question.image;
   optionsDiv.innerHTML = '';
   nextBtn.classList.add('d-none');
+
+  correctCountEl.textContent = `Correct: ${correctCount}`;
+  wrongCountEl.textContent = `Wrong: ${wrongCount}`;
+  questionNumberEl.textContent = `Question: ${currentQuestion + 1} / ${quizQuestions.length}`;
 
   const shuffledOptions = [...question.options];
   shuffleArray(shuffledOptions);
@@ -76,17 +89,22 @@ function showQuestion() {
       nextBtn.classList.remove('d-none');
 
       if (option === question.correct) {
-        btn.classList.remove('btn-outline-primary');
-        btn.classList.add('btn-success');
+        btn.classList.replace('btn-outline-primary', 'btn-success');
+        correctCount++;
       } else {
-        btn.classList.remove('btn-outline-primary');
-        btn.classList.add('btn-danger');
+        btn.classList.replace('btn-outline-primary', 'btn-danger');
+        wrongCount++;
+
+        // Doğru cevabı göster
         const correctBtn = [...optionsDiv.children].find(b => b.textContent === question.correct);
         if (correctBtn) {
-          correctBtn.classList.remove('btn-outline-primary');
-          correctBtn.classList.add('btn-success');
+          correctBtn.classList.replace('btn-outline-primary', 'btn-success');
         }
       }
+
+      correctCountEl.textContent = `Correct: ${correctCount}`;
+      wrongCountEl.textContent = `Wrong: ${wrongCount}`;
+      questionNumberEl.textContent = `Question: ${currentQuestion + 1} / ${quizQuestions.length}`;
     };
     optionsDiv.appendChild(btn);
   });
@@ -94,16 +112,28 @@ function showQuestion() {
 
 document.getElementById('nextBtn').addEventListener('click', () => {
   currentQuestion++;
-  if (currentQuestion < questions.length) {
+  if (currentQuestion < quizQuestions.length) {
     showQuestion();
   } else {
-    document.querySelector('.card-body').innerHTML = '<h3>Quiz Completed 🎉</h3>';
+    const cardBody = document.querySelector('.card-body');
+    cardBody.innerHTML = `
+      <h3>Quiz Completed 🎉</h3>
+      <p>Your score: ${correctCount} / ${quizQuestions.length}</p>
+      <p>Please refresh the page to restart the quiz.</p>
+    `;
   }
 });
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
+function initQuiz() {
+  allQuestions = parseTSV(rawData);
+  shuffleArray(allQuestions);
+  quizQuestions = allQuestions.slice(0, 20);
+  correctCount = 0;
+  wrongCount = 0;
+  currentQuestion = 0;
+  showQuestion();
 }
+
+window.onload = () => {
+  initQuiz();
+};

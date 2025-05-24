@@ -1,39 +1,93 @@
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-  }
-  
-  .card {
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
-    transition: transform 0.3s ease;
+  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.card {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  background: white;
+}
+
+.card.text-center {
+  max-width: 500px;
+  flex-grow: 1;
+  padding: 1.5rem 1.8rem;
+}
+
+#score {
+  width: 160px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  padding: 1.5rem 1.8rem;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+#score h6 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+  background-color: #e2e6ea;
+  color: #0d6efd;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+#image {
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 0.8rem;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  background: #f9f9f9;
+  margin-bottom: 1rem;
+}
+
+
+@media (max-width: 576px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
   }
 
-  .btn-outline-primary {
-    font-weight: 600;
-    font-size: 1.05rem;
-    padding: 0.6rem 1rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  .card.text-center {
+    max-width: 100%;
+    width: 100%;
   }
-  
-  .btn-outline-primary:hover {
-    background-color: transparent;
-    color: #667eea;
-    border-color: #667eea;
+
+  #score {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 1rem;
+    position: static;
   }
-  
-  .btn-success {
-    background-color: #28a745 !important;
-    border-color: #28a745 !important;
-    color: white;
-    font-weight: 700;
+
+  #image {
+    max-height: 150px;
   }
-  
-  .btn-danger {
-    background-color: #dc3545 !important;
-    border-color: #dc3545 !important;
-    color: white;
-    font-weight: 700;
-  }
+}
