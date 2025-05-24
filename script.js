@@ -13,7 +13,7 @@ images/sit.png	Think	Speak	Sit	Listen	Sit
 images/cry.png	Talk	Listen	Cry	Write	Cry
 images/celebrate.png	Celebrate	Sing	Play	Run	Celebrate
 images/drink.png	Drink	Drive	Walk	Run	Drink
-images/run.png	Listen	Talk	Write	Run	Drink
+images/run.png	Listen	Talk	Write	Run	Run
 images/watch.png	Cook	Watch	Drink	Read	Watch
 images/discuss.png	Ride	Drive	Discuss	Run	Discuss
 images/write.png	Watch	See	Look	Write	Write
@@ -33,7 +33,6 @@ images/sell.png	Play	Sell	Sing	Write	Sell
 let questions = [];
 let currentQuestion = 0;
 
-// Parse the TSV text data
 function parseTSV(tsv) {
   const lines = tsv.trim().split('\n');
   const headers = lines[0].split('\t');
@@ -73,15 +72,21 @@ function showQuestion() {
     btn.textContent = option;
     btn.className = 'btn btn-outline-primary';
     btn.onclick = () => {
+      optionsDiv.querySelectorAll('button').forEach(b => b.disabled = true);
+      nextBtn.classList.remove('d-none');
+
       if (option === question.correct) {
         btn.classList.remove('btn-outline-primary');
         btn.classList.add('btn-success');
       } else {
         btn.classList.remove('btn-outline-primary');
         btn.classList.add('btn-danger');
+        const correctBtn = [...optionsDiv.children].find(b => b.textContent === question.correct);
+        if (correctBtn) {
+          correctBtn.classList.remove('btn-outline-primary');
+          correctBtn.classList.add('btn-success');
+        }
       }
-      optionsDiv.querySelectorAll('button').forEach(b => b.disabled = true);
-      nextBtn.classList.remove('d-none');
     };
     optionsDiv.appendChild(btn);
   });
